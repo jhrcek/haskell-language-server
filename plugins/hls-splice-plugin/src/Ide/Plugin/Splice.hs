@@ -47,7 +47,6 @@ import           Development.IDE.GHC.Compat      hiding (getLoc)
 import           Development.IDE.GHC.ExactPrint
 import           Exception
 import           GHC.Exts
-import           GhcMonad
 import           GhcPlugins                      hiding (Var, getLoc, (<>))
 import           Ide.Plugin.Splice.Types
 import           Ide.Types

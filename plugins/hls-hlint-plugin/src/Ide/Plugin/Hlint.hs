@@ -44,7 +44,6 @@ import           Data.Typeable
 import           Development.IDE                                    hiding
                                                                     (Error)
 import           Development.IDE.Core.Rules                         (defineNoFile,
-                                                                     getParsedModuleWithComments,
                                                                      usePropertyAction)
 import           Development.IDE.Core.Shake                         (getDiagnostics)
 import           Refact.Apply
@@ -58,8 +57,7 @@ import           "ghc-lib" GHC                                      hiding
                                                                     (DynFlags (..),
                                                                      ms_hspp_opts)
 import           "ghc-lib-parser" GHC.LanguageExtensions            (Extension)
-import           "ghc" HscTypes                                     as RealGHC.HscTypes (hsc_dflags,
-                                                                                         ms_hspp_opts)
+import           "ghc" HscTypes                                     as RealGHC.HscTypes (ms_hspp_opts)
 import           Language.Haskell.GhclibParserEx.GHC.Driver.Session as GhclibParserEx (readExtension)
 import           System.FilePath                                    (takeFileName)
 import           System.IO                                          (IOMode (WriteMode),

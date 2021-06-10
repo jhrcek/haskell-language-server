@@ -15,12 +15,10 @@ import           Control.Monad.IO.Class
 import           Data.Aeson
 import           Data.Foldable
 import           Data.Function (on)
-import qualified Data.Map as M
 import           Data.Maybe
 import           Data.Text (Text)
 import qualified Data.Text as T
 import qualified Data.Text.IO as T
-import qualified Ide.Plugin.Config as Plugin
 import           Ide.Plugin.Tactic as Tactic
 import           Language.LSP.Types
 import           Language.LSP.Types.Lens hiding (actions, applyEdit, capabilities, executeCommand, id, line, message, name, rename, title)

@@ -10,7 +10,8 @@ import  Wingman.Types
 
 spec :: Spec
 spec = do
-  let metaTest l c f =
+  let metaTest :: Int -> Int -> String -> Spec
+      metaTest l c f =
 #if __GLASGOW_HASKELL__ >= 808
         goldenTest RunMetaprogram "" l c f
 #else
