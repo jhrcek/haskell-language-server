@@ -1,3 +1,4 @@
+{-# LANGUAGE BangPatterns               #-}
 {-# LANGUAGE CPP                        #-}
 {-# LANGUAGE DeriveAnyClass             #-}
 {-# LANGUAGE DeriveFunctor              #-}
@@ -5,10 +6,9 @@
 {-# LANGUAGE DerivingStrategies         #-}
 {-# LANGUAGE ExistentialQuantification  #-}
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
+{-# LANGUAGE PatternSynonyms            #-}
 {-# LANGUAGE RecordWildCards            #-}
 {-# LANGUAGE ScopedTypeVariables        #-}
-{-# LANGUAGE PatternSynonyms            #-}
-{-# LANGUAGE BangPatterns               #-}
 {-# LANGUAGE ViewPatterns               #-}
 
 module Development.IDE.Graph.Internal.Types where
@@ -23,15 +23,15 @@ import qualified Data.ByteString               as BS
 import           Data.Coerce
 import           Data.Dynamic
 import qualified Data.HashMap.Strict           as Map
-import qualified Data.IntMap.Strict            as IM
 import           Data.IntMap                   (IntMap)
-import qualified Data.IntSet                   as IS
+import qualified Data.IntMap.Strict            as IM
 import           Data.IntSet                   (IntSet)
-import qualified Data.Text                     as T
-import           Data.Text                     (Text)
+import qualified Data.IntSet                   as IS
 import           Data.IORef
 import           Data.List                     (intercalate)
 import           Data.Maybe
+import           Data.Text                     (Text)
+import qualified Data.Text                     as T
 import           Data.Typeable
 import           Development.IDE.Graph.Classes
 import           GHC.Conc                      (TVar, atomically)
@@ -39,8 +39,8 @@ import           GHC.Generics                  (Generic)
 import qualified ListT
 import qualified StmContainers.Map             as SMap
 import           StmContainers.Map             (Map)
-import           System.Time.Extra             (Seconds)
 import           System.IO.Unsafe
+import           System.Time.Extra             (Seconds)
 import           UnliftIO                      (MonadUnliftIO)
 
 
