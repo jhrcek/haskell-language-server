@@ -73,10 +73,10 @@ data SRules = SRules {
 -- ACTIONS
 
 -- | An action representing something that can be run as part of a 'Rule'.
--- 
+--
 -- 'Action's can be pure functions but also have access to 'IO' via 'MonadIO' and 'MonadUnliftIO.
 -- It should be assumed that actions throw exceptions, these can be caught with
--- 'Development.IDE.Graph.Internal.Action.actionCatch'. In particular, it is 
+-- 'Development.IDE.Graph.Internal.Action.actionCatch'. In particular, it is
 -- permissible to use the 'MonadFail' instance, which will lead to an 'IOException'.
 newtype Action a = Action {fromAction :: ReaderT SAction IO a}
     deriving newtype (Monad, Applicative, Functor, MonadIO, MonadFail, MonadThrow, MonadCatch, MonadMask, MonadUnliftIO)
@@ -105,7 +105,9 @@ data KeyValue = forall a . (Eq a, Typeable a, Hashable a, Show a) => KeyValue a 
 
 newtype Key = UnsafeMkKey Int
 
+pattern Key :: () => (Typeable a, Hashable a, Show a) => a -> Key
 pattern Key a <- (lookupKeyValue -> KeyValue a _)
+{-# COMPLETE Key #-}
 
 data GlobalKeyValueMap = GlobalKeyValueMap !(Map.HashMap KeyValue Key) !(IntMap KeyValue) {-# UNPACK #-} !Int
 
@@ -114,7 +116,7 @@ keyMap = unsafePerformIO $ newIORef (GlobalKeyValueMap Map.empty IM.empty 0)
 
 {-# NOINLINE keyMap #-}
 
-newKey :: (Eq a, Typeable a, Hashable a, Show a) => a -> Key
+newKey :: (Typeable a, Hashable a, Show a) => a -> Key
 newKey k = unsafePerformIO $ do
   let !newKey = KeyValue k (T.pack (show k))
   atomicModifyIORef' keyMap $ \km@(GlobalKeyValueMap hm im n) ->
@@ -145,7 +147,7 @@ instance Eq KeyValue where
 instance Hashable KeyValue where
     hashWithSalt i (KeyValue x _) = hashWithSalt i (typeOf x, x)
 instance Show KeyValue where
-    show (KeyValue x t) = T.unpack t
+    show (KeyValue _ t) = T.unpack t
 
 renderKey :: Key -> Text
 renderKey (lookupKeyValue -> KeyValue _ t) = t

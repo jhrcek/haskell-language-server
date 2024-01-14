@@ -124,19 +124,14 @@ test-suite tests
 
   build-depends:
     , base
-    , containers
-    , directory
     , extra
-    , filepath
     , hls-graph
     , hspec
     , stm
     , stm-containers
     , tasty
     , tasty-hspec
-    , tasty-hunit
     , tasty-rerun
-    , text
     , unordered-containers
 
   build-tool-depends: hspec-discover:hspec-discover
