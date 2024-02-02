@@ -3,6 +3,7 @@ name: Testing
 defaults:
   run:
     shell: bash
+    working-directory: ./hls
 
 # See: https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#concurrency.
 concurrency:
@@ -74,7 +75,7 @@ jobs:
           - ubuntu-latest
           - macOS-latest
           - windows-latest
-        test: 
+        test:
           - true
           - false
         exclude:
@@ -145,7 +146,7 @@ jobs:
         name: Test hls-refactor-plugin
         run: cabal test hls-refactor-plugin-tests --test-options="$TEST_OPTS" || cabal test hls-refactor-plugin-tests --test-options="$TEST_OPTS"
 
-      - if: matrix.test 
+      - if: matrix.test
         name: Test hls-floskell-plugin
         run: cabal test hls-floskell-plugin-tests --test-options="$TEST_OPTS" || cabal test hls-floskell-plugin-tests --test-options="$TEST_OPTS"
 
@@ -173,11 +174,11 @@ jobs:
         name: Test hls-stylish-haskell-plugin
         run: cabal test hls-stylish-haskell-plugin-tests --test-options="$TEST_OPTS" || cabal test hls-stylish-haskell-plugin-tests --test-options="$TEST_OPTS"
 
-      - if: matrix.test 
+      - if: matrix.test
         name: Test hls-ormolu-plugin
         run: cabal test hls-ormolu-plugin-tests --test-options="$TEST_OPTS" || cabal test hls-ormolu-plugin-tests --test-options="$TEST_OPTS"
 
-      - if: matrix.test 
+      - if: matrix.test
         name: Test hls-fourmolu-plugin
         run: cabal test hls-fourmolu-plugin-tests --test-options="$TEST_OPTS" || cabal test hls-fourmolu-plugin-tests --test-options="$TEST_OPTS"
 
@@ -193,7 +194,7 @@ jobs:
         name: Test hls-rename-plugin test suite
         run: cabal test hls-rename-plugin-tests --test-options="$TEST_OPTS" || cabal test hls-rename-plugin-tests --test-options="$TEST_OPTS"
 
-      - if: matrix.test 
+      - if: matrix.test
         name: Test hls-hlint-plugin test suite
         run: cabal test hls-hlint-plugin-tests --test-options="$TEST_OPTS" || cabal test hls-hlint-plugin-tests --test-options="$TEST_OPTS"
 

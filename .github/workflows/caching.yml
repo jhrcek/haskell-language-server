@@ -20,6 +20,7 @@ name: Caching
 defaults:
   run:
     shell: bash
+    working-directory: ./hls
 
 # See: https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#concurrency.
 concurrency:
