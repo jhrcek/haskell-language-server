@@ -18,7 +18,7 @@ allow-newer: true
 extra-deps:
 - floskell-0.11.1
 - retrie-1.2.2
-- hiedb-0.6.0.0
+- url: https://github.com/jhrcek/HieDb/archive/e70eb8eab42dddc6d7eb00be7222b62a4cf5c0a6.tar.gz
 - implicit-hie-0.1.4.0
 - lsp-2.4.0.0
 - lsp-test-0.17.0.0
