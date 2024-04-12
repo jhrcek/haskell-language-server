@@ -651,14 +651,16 @@ runSessionWithServer' plugins conf sconf caps root s =  withLock lock $ keepCurr
 
 -- | Wait for the next progress end step
 waitForProgressDone :: Session ()
-waitForProgressDone = skipManyTill anyMessage $ satisfyMaybe $ \case
-  FromServerMess  SMethod_Progress  (TNotificationMessage _ _ (ProgressParams _ v)) | is _workDoneProgressEnd v-> Just ()
-  _ -> Nothing
+waitForProgressDone = do
+  setIgnoringProgressNotifications False
+  skipManyTill anyMessage $ satisfyMaybe $ \case
+    FromServerMess  SMethod_Progress  (TNotificationMessage _ _ (ProgressParams _ v)) | is _workDoneProgressEnd v -> Just ()
+    _ -> Nothing
 
 -- | Wait for all progress to be done
 -- Needs at least one progress done notification to return
 waitForAllProgressDone :: Session ()
-waitForAllProgressDone = loop
+waitForAllProgressDone = setIgnoringProgressNotifications False >> loop
   where
     loop = do
       ~() <- skipManyTill anyMessage $ satisfyMaybe $ \case

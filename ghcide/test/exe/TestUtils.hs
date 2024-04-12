@@ -50,25 +50,27 @@ import           LogType
 -- | Wait for the next progress begin step
 waitForProgressBegin :: Session ()
 waitForProgressBegin = skipManyTill anyMessage $ satisfyMaybe $ \case
-  FromServerMess  SMethod_Progress  (TNotificationMessage _ _ (ProgressParams _ v)) | Lens.is _workDoneProgressBegin v-> Just ()
+  FromServerMess  SMethod_Progress  (TNotificationMessage _ _ (ProgressParams _ v)) | Lens.is _workDoneProgressBegin v -> Just ()
   _ -> Nothing
 
 -- | Wait for the first progress end step
 -- Also implemented in hls-test-utils Test.Hls
 waitForProgressDone :: Session ()
-waitForProgressDone = skipManyTill anyMessage $ satisfyMaybe $ \case
-  FromServerMess  SMethod_Progress  (TNotificationMessage _ _ (ProgressParams _ v)) | Lens.is _workDoneProgressEnd v -> Just ()
-  _ -> Nothing
+waitForProgressDone = do
+  setIgnoringProgressNotifications False
+  skipManyTill anyMessage $ satisfyMaybe $ \case
+    FromServerMess  SMethod_Progress  (TNotificationMessage _ _ (ProgressParams _ v)) | Lens.is _workDoneProgressEnd v -> Just ()
+    _ -> Nothing
 
 -- | Wait for all progress to be done
 -- Needs at least one progress done notification to return
 -- Also implemented in hls-test-utils Test.Hls
 waitForAllProgressDone :: Session ()
-waitForAllProgressDone = loop
+waitForAllProgressDone = setIgnoringProgressNotifications False >> loop
   where
     loop = do
       ~() <- skipManyTill anyMessage $ satisfyMaybe $ \case
-        FromServerMess  SMethod_Progress  (TNotificationMessage _ _ (ProgressParams _ v)) |Lens.is _workDoneProgressEnd v-> Just ()
+        FromServerMess  SMethod_Progress  (TNotificationMessage _ _ (ProgressParams _ v)) |Lens.is _workDoneProgressEnd v -> Just ()
         _ -> Nothing
       done <- null <$> getIncompleteProgressSessions
       unless done loop

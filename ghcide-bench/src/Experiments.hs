@@ -579,15 +579,16 @@ badRun :: BenchRun
 badRun = BenchRun 0 0 0 0 0 0 0 0 0 0 0 0 0 False
 
 waitForProgressStart :: Session ()
-waitForProgressStart = void $ do
-    skipManyTill anyMessage $ satisfy $ \case
+waitForProgressStart = do
+    setIgnoringProgressNotifications False
+    void $ skipManyTill anyMessage $ satisfy $ \case
       FromServerMess SMethod_WindowWorkDoneProgressCreate _ -> True
       _                                              -> False
 
 -- | Wait for all progress to be done
 -- Needs at least one progress done notification to return
 waitForProgressDone :: Session ()
-waitForProgressDone = loop
+waitForProgressDone = setIgnoringProgressNotifications False >> loop
   where
     loop = do
       ~() <- skipManyTill anyMessage $ satisfyMaybe $ \case
