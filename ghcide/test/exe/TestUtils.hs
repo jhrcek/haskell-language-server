@@ -49,9 +49,11 @@ import           LogType
 
 -- | Wait for the next progress begin step
 waitForProgressBegin :: Session ()
-waitForProgressBegin = skipManyTill anyMessage $ satisfyMaybe $ \case
-  FromServerMess  SMethod_Progress  (TNotificationMessage _ _ (ProgressParams _ v)) | Lens.is _workDoneProgressBegin v -> Just ()
-  _ -> Nothing
+waitForProgressBegin = do
+  setIgnoringProgressNotifications False
+  skipManyTill anyMessage $ satisfyMaybe $ \case
+    FromServerMess  SMethod_Progress  (TNotificationMessage _ _ (ProgressParams _ v)) | Lens.is _workDoneProgressBegin v -> Just ()
+    _ -> Nothing
 
 -- | Wait for the first progress end step
 -- Also implemented in hls-test-utils Test.Hls
@@ -138,7 +140,7 @@ getConfigFromEnv = do
   timeoutOverride <- fmap read <$> getEnv "LSP_TIMEOUT"
   return defaultConfig
     { messageTimeout = fromMaybe (messageTimeout defaultConfig) timeoutOverride
-    , ignoreProgressNotifications = False
+    --, ignoreProgressNotifications = False
     , logColor
     }
   where
